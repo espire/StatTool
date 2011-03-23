@@ -7,9 +7,7 @@ public class StatTool {
 	public static double sampleMean(ArrayList<Double> c) {
 		int size = c.size();
 		double total = 0;
-		for(double i : c) {
-			total += i;
-		}
+		for(double i : c) total += i;
 		double mean = total / size;
 		return mean;
 	}
@@ -60,36 +58,28 @@ public class StatTool {
 		ArrayList<Double> dataX = new ArrayList<Double>(); // data set X
 		ArrayList<Double> dataY = new ArrayList<Double>(); // data set Y
 		
-		System.out.println();
-		System.out.println("Enter data for set X (ENTER to finish):");
+		System.err.println();
+		System.err.println("Enter data for set X (ENTER to finish):");
 		while(true) {
 			line = in.nextLine();
-			if(line.equals("")) {
-				break;
-			}
+			if(line.equals("")) break; // end of input
 			dataX.add(Double.parseDouble(line));
 		}
 		
-		System.out.println("Enter data for set Y (ENTER to skip or finish):");
+		System.err.println("Enter data for set Y (ENTER to skip or finish):");
 		while(true) {
 			line = in.nextLine();
-			if(line.equals("")) {
-				break;
-			}
+			if(line.equals("")) break; // end of input
 			dataY.add(Double.parseDouble(line));
 		}
-		if(!dataY.isEmpty()) {
-			y = true;
+		if(!dataY.isEmpty()) y = true;
+		
+		if(y && (dataX.size() != dataY.size())) {
+			System.err.println("Fatal error: data sets X and Y are not of equal size.");
+			System.exit(1);
 		}
 		
-		if(y) {
-			if(dataX.size() != dataY.size()) {
-				System.err.println("Fatal error: data sets X and Y are not of equal size.");
-				System.exit(1);
-			}
-		}
-		
-		System.out.println();
+		System.err.println();
 		System.out.println("X:");
 		System.out.println("Sample mean of data set X: " + sampleMean(dataX));
 		System.out.println("Sample variance of data set X: " + sampleVariance(dataX));
@@ -97,6 +87,7 @@ public class StatTool {
 		System.out.println("Sum of least squares of X (Sxx): " + leastSquares(dataX, dataX));
 		System.out.println();
 		if(y) {
+			// these statistics are only applicable if we have two sets of data
 			System.out.println("Y:");
 			System.out.println("Sample mean of data set Y: " + sampleMean(dataY));
 			System.out.println("Sample variance of data set Y: " + sampleVariance(dataY));
@@ -106,6 +97,7 @@ public class StatTool {
 			System.out.println("X and Y:");
 			System.out.println("Sum of least squares of X and Y (Sxy): " + leastSquares(dataX, dataY));
 			System.out.println("Most likely linear coefficient (beta-hat): " + leastSquares(dataX,dataY)/leastSquares(dataX,dataX));
+			System.out.println("Most likely constant (alpha-hat): " + (sampleMean(dataY) - (leastSquares(dataX,dataY)/leastSquares(dataX,dataX))*sampleMean(dataX)));
 		}
 		System.out.println();
 	}
