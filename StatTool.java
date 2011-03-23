@@ -40,11 +40,14 @@ public class StatTool {
 		double meanX = sampleMean(dataX);
 		double meanY = sampleMean(dataY);
 		double total = 0;
+		double size = dataX.size();
+		double nxy = meanX * meanY * size; // n*Xbar*Ybar
+		
 		for(int i=0; i<dataX.size(); i++) {
-			deviationX = dataX.get(i) - meanX;
-			deviationY = dataY.get(i) - meanY;
-			total += deviationX * deviationY;
+			total += dataX.get(i)*dataY.get(i);
 		}
+		total -= nxy;
+		
 		return total;
 	}
 	
@@ -86,16 +89,23 @@ public class StatTool {
 			}
 		}
 		
+		System.out.println();
+		System.out.println("X:");
 		System.out.println("Sample mean of data set X: " + sampleMean(dataX));
 		System.out.println("Sample variance of data set X: " + sampleVariance(dataX));
 		System.out.println("Sample standard deviation of data set X: " + sampleStdDev(dataX));
+		System.out.println("Sum of least squares of X (Sxx): " + leastSquares(dataX, dataX));
 		System.out.println();
 		if(y) {
+			System.out.println("Y:");
 			System.out.println("Sample mean of data set Y: " + sampleMean(dataY));
 			System.out.println("Sample variance of data set Y: " + sampleVariance(dataY));
 			System.out.println("Sample standard deviation of data set Y: " + sampleStdDev(dataY));
+			System.out.println("Sum of least squares of Y and Y (Syy): " + leastSquares(dataX, dataY));
 			System.out.println();
-			System.out.println("Sum of least squares of X and Y:" + leastSquares(dataX, dataY));
+			System.out.println("X and Y:");
+			System.out.println("Sum of least squares of X and Y (Sxy): " + leastSquares(dataX, dataY));
+			System.out.println("Most likely linear coefficient (beta-hat): " + leastSquares(dataX,dataY)/leastSquares(dataX,dataX));
 		}
 		System.out.println();
 	}
