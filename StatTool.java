@@ -12,8 +12,13 @@ public class StatTool {
 		return mean;
 	}
 	
-	// calculate the sample variance of a given data set
+	// calculate the sample variance with one degree of freedom lost
 	public static double sampleVariance(ArrayList<Double> c) {
+		return variance(c, 1);
+	}
+	
+	// calculate the variance of a given data set for a given number of degrees of freedom lost
+	public static double variance(ArrayList<Double> c, int degreesLost) {
 		double size = c.size();
 		double mean = sampleMean(c);
 		double total = 0;
@@ -22,13 +27,18 @@ public class StatTool {
 			deviation = i - mean;
 			total += Math.pow(deviation, 2);
 		}
-		double variance = (1 / (size - 1)) * total;
+		double variance = (1 / (size - degreesLost)) * total;
 		return variance;
+	}
+	
+	// calculate the sample standard deviation of a given data set for a given number of degrees of freedom lost
+	public static double stdDev(ArrayList<Double> c, int degreesLost) {
+		return Math.sqrt(variance(c,degreesLost));
 	}
 	
 	// calculate the standard deviation of a given data set
 	public static double sampleStdDev(ArrayList<Double> c) {
-		return Math.sqrt(sampleVariance(c));
+		return stdDev(c, 1);
 	}
 	
 	// calculate the sum of least squares of two sets of data
@@ -92,7 +102,8 @@ public class StatTool {
 			System.out.println("Sample mean of data set Y: " + sampleMean(dataY));
 			System.out.println("Sample variance of data set Y: " + sampleVariance(dataY));
 			System.out.println("Sample standard deviation of data set Y: " + sampleStdDev(dataY));
-			System.out.println("Sum of least squares of Y and Y (Syy): " + leastSquares(dataX, dataY));
+			System.out.println("Sample standard deviation, -2 degrees of freedom: (totally wrong, man) " + stdDev(dataY,2));
+			System.out.println("Sum of least squares of Y and Y (Syy): " + leastSquares(dataY, dataY));
 			System.out.println();
 			System.out.println("X and Y:");
 			System.out.println("Sum of least squares of X and Y (Sxy): " + leastSquares(dataX, dataY));
